@@ -1,0 +1,11 @@
+* SmileBASIC Mode
+Rudimentary Emacs Major Mode for [[http://smilebasic.com/en/][SmileBASIC]]
+
+[[http://kland.smilebasicsource.com/i/divla.png]]
+
+Contributions encouraged!  I have no known plans for this file, and it has served me well in its current state for a long time, but it is still missing some features.
+
+Possible improvements include:
+- numeric highlighting
+- integrating an autocomplete package like [[https://github.com/auto-complete/auto-complete][auto-complete.el]]
+- format conversion and export to citra folders à la [[http://trinitro21.github.io/]]
