@@ -107,7 +107,7 @@ beginning of a line or after a statement separator (:).")
 	0
       (if (re-search-backward "^[ \t]*[^ \t\n\r]" nil t)
 	  (if (or (looking-at smilebasic-increase-indent-keywords-bol)
-		  (looking-at "[ \t]*(ELSEIF|IF|ELSE[ \t]+IF)[^:\r\n]+THEN[ \t]*$"))
+		  (looking-at "[ \t]*\\(ELSEIF\\|IF\\|ELSE[ \t]+IF\\)[^:\r\n]+THEN[ \t]*$"))
 	      (+ (current-indentation) smilebasic-indent-offset)
 	    (if (looking-at smilebasic-increase-indent-keywords-eol)
 		(+ (current-indentation) smilebasic-indent-offset)
