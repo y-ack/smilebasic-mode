@@ -56,7 +56,7 @@ Statements inside a block are indented this number of columns."
 
 (defconst smilebasic-increase-indent-keywords-bol
   (concat "[ \t]*"
-	  (regexp-opt '("FOR" "REPEAT" "WHILE" "DEF")
+	  (regexp-opt '("FOR" "REPEAT" "WHILE" "DEF" "COMMON")
               'symbols))
   "Regexp string of keywords that increase indentation.
 These keywords increase indentation when found at the
