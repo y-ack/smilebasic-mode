@@ -63,19 +63,21 @@ These keywords increase indentation when found at the
 beginning of a line.")
 
 (defconst smilebasic-increase-indent-keywords-eol
-  (regexp-opt '("THEN")
-              'symbols)
+  (concat "[ \t]*"
+	  (regexp-opt '("THEN" "ELSE")
+              'symbols))
   "Regexp string of keywords that increase indentation.
 These keywords increase indentation when found at the
 end of a line.")
 
 (defconst smilebasic-decrease-indent-keywords-bol
   (concat "[ \t]*"
-	  (regexp-opt '("ENDIF" "END" "NEXT" "WEND" "UNTIL" "ELSEIF")
+	  (regexp-opt '("ENDIF" "END" "NEXT" "WEND" "UNTIL" "ELSEIF" "ELSE")
               'symbols))
   "Regexp string of keywords that decrease indentation.
 These keywords decrease indentation when found at the
 beginning of a line or after a statement separator (:).")
+
 
 (defun smilebasic-indent-line ()
   "Indent current line as basic script."
