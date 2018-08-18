@@ -1,3 +1,39 @@
+;;; smilebasic.el --- Major mode for SmileBASIC.
+
+;; Author: PatheticFish <https://github.com/PatheticFish>
+;; Keywords: highlight smilebasic
+;; Version: 1.0.0
+
+;; This is free and unencumbered software released into the public domain.
+
+;; Anyone is free to copy, modify, publish, use, compile, sell, or
+;; distribute this software, either in source code form or as a compiled
+;; binary, for any purpose, commercial or non-commercial, and by any
+;; means.
+
+;; In jurisdictions that recognize copyright laws, the author or authors
+;; of this software dedicate any and all copyright interest in the
+;; software to the public domain. We make this dedication for the benefit
+;; of the public at large and to the detriment of our heirs and
+;; successors. We intend this dedication to be an overt act of
+;; relinquishment in perpetuity of all present and future rights to this
+;; software under copyright law.
+
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+;; IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+;; OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+;; ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+;; OTHER DEALINGS IN THE SOFTWARE.
+
+;; For more information, please refer to <http://unlicense.org>
+
+;;; Commentary:
+;;; Major mode for SmileBASIC.  Supports syntax highlighting and auto-indentation.
+
+;;; Code:
+
 ;;(defvar smilebasic-mode-hook nil)
 
 (defvar smilebasic-syntax-table
@@ -132,3 +168,5 @@ beginning of a line or after a statement separator (:).")
 (add-to-list 'auto-mode-alist '("\\.PRG\\'" . smilebasic-mode))
 
 (provide 'smilebasic-mode)
+
+;;; smilebasic.el ends here
