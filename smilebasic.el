@@ -1,8 +1,8 @@
 ;;; smilebasic.el --- Major mode for SmileBASIC.
 
-;; Author: PatheticFish <https://github.com/PatheticFish>
+;; Author: Y <https://github.com/y-ack>
 ;; Keywords: highlight smilebasic
-;; Version: 1.0.0
+;; Version: 1.0.2
 
 ;; This is free and unencumbered software released into the public domain.
 
@@ -34,24 +34,24 @@
 
 ;;; Code:
 
-;;(defvar smilebasic-mode-hook nil)
+(defvar smilebasic-mode-hook nil)
 
 (defvar smilebasic-syntax-table
-      (let ((table (make-syntax-table)))
-        (modify-syntax-entry ?' "<" table)
-	(modify-syntax-entry ?\n ">" table)
-	(modify-syntax-entry ?\" "\"" table)
-	(modify-syntax-entry ?\; "." table)
-	(modify-syntax-entry ?\\ "w" table)
-	(modify-syntax-entry ?_ "w" table)
-	(modify-syntax-entry ?\w "w" table)
-	(modify-syntax-entry ?, "." table)
-	(modify-syntax-entry ?( "(" table)
-	(modify-syntax-entry ?[ "(" table)
-	(modify-syntax-entry ?) ")" table)
-	(modify-syntax-entry ?] ")" table)
-        table)
-      "Syntax table for smilebasic-mode")
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?' "<" table)
+    (modify-syntax-entry ?\n ">" table)
+    (modify-syntax-entry ?\" "\"" table)
+    (modify-syntax-entry ?\; "." table)
+    (modify-syntax-entry ?\\ "w" table)
+    (modify-syntax-entry ?_ "w" table)
+    (modify-syntax-entry ?\w "w" table)
+    (modify-syntax-entry ?, "." table)
+    (modify-syntax-entry ?( "(" table)
+			 (modify-syntax-entry ?[ "(" table)
+					      (modify-syntax-entry ?) ")" table)
+			 (modify-syntax-entry ?] ")" table)
+    table)
+  "Syntax table for smilebasic-mode")
 
 (defvar smilebasic-tab-width 2 "Width of a tab in SmileBASIC mode (default 2)")
 
@@ -72,13 +72,13 @@
 (defvar smilebasic-font-lock-defaults
   `((
      ("\"\\.\\*\\?[\"$]" . font-lock-string-face)
-     ("[Dd][Ee][Ff]\\s*\\([\\w][\\w\\d]+\\)" . font-lock-function-name-face)
      ( ,(concat (regexp-opt smilebasic-constants t ) "\\b") . font-lock-constant-face)
      ( ,(regexp-opt smilebasic-operators nil) . font-lock-builtin-face)
      ( ,(regexp-opt smilebasic-word-operators 'words) . font-lock-builtin-face)
      ("\\bCALL[ \t]+\\(SPRITE\\|BG\\)\\b" . font-lock-keyword-face)
      ( ,(regexp-opt smilebasic-keywords 'symbols) . font-lock-keyword-face)
      ( ,(regexp-opt smilebasic-functions 'words) . font-lock-builtin-face)
+     ("\\(?:\\b[Dd][Ee][Ff][ \t]+\\)\\([a-zA-Z_][a-zA-Z0-9_]*\\)" (1 font-lock-function-name-face))
      ("@\\w+" . font-lock-warning-face) ; labels (todo custom face classes?)
      ("\\b\\(?:[0-9]*\\.\\)?[0-9]+\\(?:E[+\\-]?[0-9]+\\)?\\#?\\|\\&H[0-9A-F]+\\|\\&B[01]+" . font-lock-constant-face)
      ) nil t))
@@ -86,32 +86,32 @@
 
 ;; Indentation
 (defcustom smilebasic-indent-offset 2
-  "*Specifies the indentation offset for `smilebasic-indent-line'.
+    "*Specifies the indentation offset for `smilebasic-indent-line'.
 Statements inside a block are indented this number of columns."
-  :type 'integer
-  :group 'smilebasic)
+    :type 'integer
+    :group 'smilebasic)
 
 (defconst smilebasic-increase-indent-keywords-bol
   (concat "[ \t]*"
 	  (regexp-opt '("FOR" "REPEAT" "WHILE" "DEF" "COMMON")
-              'symbols))
-  "Regexp string of keywords that increase indentation.
+		      'symbols))
+    "Regexp string of keywords that increase indentation.
 These keywords increase indentation when found at the
 beginning of a line.")
 
 (defconst smilebasic-increase-indent-keywords-eol
   (concat "[ \t]*"
 	  (regexp-opt '("THEN" "ELSE")
-              'symbols))
-  "Regexp string of keywords that increase indentation.
+		      'symbols))
+    "Regexp string of keywords that increase indentation.
 These keywords increase indentation when found at the
 end of a line.")
 
 (defconst smilebasic-decrease-indent-keywords-bol
   (concat "[ \t]*"
 	  (regexp-opt '("ENDIF" "END" "NEXT" "WEND" "UNTIL" "ELSEIF" "ELSE")
-              'symbols))
-  "Regexp string of keywords that decrease indentation.
+		      'symbols))
+    "Regexp string of keywords that decrease indentation.
 These keywords decrease indentation when found at the
 beginning of a line or after a statement separator (:).")
 
@@ -135,8 +135,8 @@ beginning of a line or after a statement separator (:).")
 	  (if (> (- (point-max) old-pos) (point))
 	      (goto-char (- (point-max) old-pos)))))
     shift-amt))
-    
-			  
+
+
 (defun smilebasic-calculate-indent ()
   "Return appropriate indentation for the current line as basic code."
   (save-excursion
