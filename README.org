@@ -8,4 +8,4 @@ Contributions encouraged!  I have no known plans for this file, and it has serve
 Possible improvements include:
 - +numeric highlighting+
 - integrating an autocomplete package like [[https://github.com/auto-complete/auto-complete][auto-complete.el]]
-- format conversion and export to citra folders à la [[http://trinitro21.github.io/]]
+- [in-progress] format conversion and export to citra folders à la [[http://trinitro21.github.io/]]
