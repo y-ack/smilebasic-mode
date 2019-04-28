@@ -36,6 +36,84 @@
 
 (defvar smilebasic-mode-hook nil)
 
+(defun number-to-bytes (num n)
+  (set 'bytes (last (cdr (split-char num)) n))
+  (concat (make-list (- n (safe-length bytes)) 0)
+	  bytes))
+(defun smilebasic-header-pad (s n)
+  (concat s
+	  (make-string (- n (length s)) 0)))
+
+(defun convert-from-sb-txt (begin end)
+  "convert a TXT file with header/footer to nice text"
+      (set 'smilebasic-header-magic
+	   (delete-and-extract-region begin (+ begin 2)))
+      (set 'smilebasic-header-type
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-unused-1
+	   (delete-and-extract-region begin (+ begin 3)))
+      (set 'smilebasic-header-icon
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-unused-2
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-size
+	   (delete-and-extract-region begin (+ begin 4)))
+      (set 'smilebasic-header-year
+	   (delete-and-extract-region begin (+ begin 2)))
+      (set 'smilebasic-header-month
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-day
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-hour
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-minute
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-second
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-compressed
+	   (delete-and-extract-region begin (+ begin 1)))
+      (set 'smilebasic-header-nnid-1
+	   (delete-and-extract-region begin (+ begin 18)))
+      (set 'smilebasic-header-nnid-2
+	   (delete-and-extract-region begin (+ begin 18)))
+      (set 'smilebasic-header-blacklist-1
+	   (delete-and-extract-region begin (+ begin 4)))
+      (set 'smilebasic-header-blacklist-2
+	   (delete-and-extract-region begin (+ begin 4)))
+      (set 'smilebasic-header-unused-3
+	   (delete-and-extract-region begin (+ begin 16)))
+      (set 'end (- end 80))
+      (set 'smilebasic-footer (delete-and-extract-region (- end 20) end))
+      (set 'end (- end 20)))
+  
+(defun convert-to-sb-txt (begin end buffer)
+  "convert a SB source buffer to a PRG file with header/footer"
+  (goto-char begin)
+  (insert smilebasic-header-magic)
+  (insert smilebasic-header-type)
+  (insert smilebasic-header-unused-1)
+  (insert smilebasic-header-icon)
+  (insert smilebasic-header-unused-2)
+  (insert smilebasic-header-year)
+  (insert smilebasic-header-month)
+  (insert smilebasic-header-day)
+  (insert smilebasic-header-hour)
+  (insert smilebasic-header-minute)
+  (insert smilebasic-header-second)
+  (insert smilebasic-header-compressed)
+  (insert smilebasic-header-nnid-1)
+  (insert smilebasic-header-nnid-2)
+  (insert smilebasic-header-blacklist-1)
+  (insert smilebasic-header-blacklist-2)
+  (insert smilebasic-header-unused-3)
+  (goto-char (+ end 80))
+  (insert smilebasic-footer)
+  (+ end 100))
+
+; make smilebasic format available for behind the scenes conversion
+(add-to-list 'format-alist
+	     '(smilebasic-txt "sbfs PRG header/footer" "\0\0" convert-from-sb-txt convert-to-sb-txt t nil nil))
+
 (defvar smilebasic-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?' "<" table)
@@ -47,9 +125,9 @@
     (modify-syntax-entry ?\w "w" table)
     (modify-syntax-entry ?, "." table)
     (modify-syntax-entry ?( "(" table)
-			 (modify-syntax-entry ?[ "(" table)
-					      (modify-syntax-entry ?) ")" table)
-			 (modify-syntax-entry ?] ")" table)
+    (modify-syntax-entry ?[ "(" table)
+    (modify-syntax-entry ?) ")" table)
+    (modify-syntax-entry ?] ")" table)
     table)
   "Syntax table for smilebasic-mode")
 
@@ -164,7 +242,39 @@ beginning of a line or after a statement separator (:).")
   (setq-local comment-end "")
   (setq-local font-lock-defaults smilebasic-font-lock-defaults)
   (when smilebasic-tab-width
-    (setq tab-width smilebasic-tab-width)))
+    (setq tab-width smilebasic-tab-width))
+  (setq-local smilebasic-header-magic "\x01\x00")
+  (setq-local smilebasic-header-type "\x00")
+  (setq-local smilebasic-header-unused-1 "\x00")
+  (setq-local smilebasic-header-icon "\x00")
+  (setq-local smilebasic-header-unused-2 "\x00\x00\x00")
+  (setq-local smilebasic-header-size
+	      (number-to-bytes (point-max) 4))
+  (setq-local smilebasic-header-year
+	      (number-to-bytes (string-to-number (format-time-string "%Y")) 2))
+  (setq-local smilebasic-header-month
+	      (number-to-bytes (string-to-number (format-time-string "%m")) 1))
+  (setq-local smilebasic-header-day
+	    (number-to-bytes (string-to-number (format-time-string "%d")) 1))
+  (setq-local smilebasic-header-hour
+	      (number-to-bytes (string-to-number (format-time-string "%l")) 1))
+  (setq-local smilebasic-header-minute
+	      (number-to-bytes (string-to-number (format-time-string "%M")) 1))
+  (setq-local smilebasic-header-second
+	      (number-to-bytes (string-to-number (format-time-string "%S")) 1))
+  (setq-local smilebasic-header-compressed "\x00")
+  (setq-local smilebasic-header-nnid-1
+	      (smilebasic-header-pad "NAME" 18))
+  (setq-local smilebasic-header-nnid-2
+	      (smilebasic-header-pad "NAME" 18))
+  (setq-local smilebasic-header-blacklist-1
+	      (number-to-bytes 0 4))
+  (setq-local smilebasic-header-blacklist-2
+	      (number-to-bytes 0 4))
+  (setq-local smilebasic-header-unused-3
+	      (smilebasic-header-pad "" 16))
+  (setq-local smilebasic-footer "emacs SmileBASICMode")
+  )
 
 (add-to-list 'auto-mode-alist '("\\.PRG\\'" . smilebasic-mode))
 
