@@ -94,6 +94,7 @@
   (insert smilebasic-header-unused-1)
   (insert smilebasic-header-icon)
   (insert smilebasic-header-unused-2)
+  (insert smilebasic-header-size)
   (insert smilebasic-header-year)
   (insert smilebasic-header-month)
   (insert smilebasic-header-day)
