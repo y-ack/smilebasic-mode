@@ -34,6 +34,11 @@
 
 ;;; Code:
 
+(defgroup smilebasic nil
+  "SmileBASIC Source Mode"
+  :prefix "smilebasic-mode-" :group nil
+  :version "1.0")
+
 (defvar smilebasic-mode-hook nil)
 
 (defun number-to-bytes (num n)
