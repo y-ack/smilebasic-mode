@@ -34,6 +34,11 @@
 
 ;;; Code:
 
+(defgroup smilebasic nil
+  "SmileBASIC Source Mode"
+  :prefix "smilebasic-mode-" :group nil
+  :version "1.0")
+
 (defvar smilebasic-mode-hook nil)
 
 (defun number-to-bytes (num n)
@@ -46,46 +51,46 @@
 
 (defun convert-from-sb-txt (begin end)
   "convert a TXT file with header/footer to nice text"
-      (set 'smilebasic-header-magic
-	   (delete-and-extract-region begin (+ begin 2)))
-      (set 'smilebasic-header-type
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-unused-1
-	   (delete-and-extract-region begin (+ begin 3)))
-      (set 'smilebasic-header-icon
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-unused-2
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-size
-	   (delete-and-extract-region begin (+ begin 4)))
-      (set 'smilebasic-header-year
-	   (delete-and-extract-region begin (+ begin 2)))
-      (set 'smilebasic-header-month
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-day
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-hour
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-minute
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-second
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-compressed
-	   (delete-and-extract-region begin (+ begin 1)))
-      (set 'smilebasic-header-nnid-1
-	   (delete-and-extract-region begin (+ begin 18)))
-      (set 'smilebasic-header-nnid-2
-	   (delete-and-extract-region begin (+ begin 18)))
-      (set 'smilebasic-header-blacklist-1
-	   (delete-and-extract-region begin (+ begin 4)))
-      (set 'smilebasic-header-blacklist-2
-	   (delete-and-extract-region begin (+ begin 4)))
-      (set 'smilebasic-header-unused-3
-	   (delete-and-extract-region begin (+ begin 16)))
-      (set 'end (- end 80))
-      (set 'smilebasic-footer (delete-and-extract-region (- end 20) end))
-      (set 'end (- end 20)))
-  
+  (set 'smilebasic-header-magic
+       (delete-and-extract-region begin (+ begin 2)))
+  (set 'smilebasic-header-type
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-unused-1
+       (delete-and-extract-region begin (+ begin 3)))
+  (set 'smilebasic-header-icon
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-unused-2
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-size
+       (delete-and-extract-region begin (+ begin 4)))
+  (set 'smilebasic-header-year
+       (delete-and-extract-region begin (+ begin 2)))
+  (set 'smilebasic-header-month
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-day
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-hour
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-minute
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-second
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-compressed
+       (delete-and-extract-region begin (+ begin 1)))
+  (set 'smilebasic-header-nnid-1
+       (delete-and-extract-region begin (+ begin 18)))
+  (set 'smilebasic-header-nnid-2
+       (delete-and-extract-region begin (+ begin 18)))
+  (set 'smilebasic-header-blacklist-1
+       (delete-and-extract-region begin (+ begin 4)))
+  (set 'smilebasic-header-blacklist-2
+       (delete-and-extract-region begin (+ begin 4)))
+  (set 'smilebasic-header-unused-3
+       (delete-and-extract-region begin (+ begin 16)))
+  (set 'end (- end 80))
+  (set 'smilebasic-footer (delete-and-extract-region (- end 20) end))
+  (set 'end (- end 20)))
+
 (defun convert-to-sb-txt (begin end buffer)
   "convert a SB source buffer to a PRG file with header/footer"
   (goto-char begin)
@@ -111,7 +116,7 @@
   (insert smilebasic-footer)
   (+ end 100))
 
-; make smilebasic format available for behind the scenes conversion
+					; make smilebasic format available for behind the scenes conversion
 (add-to-list 'format-alist
 	     '(smilebasic-txt "sbfs PRG header/footer" "\0\0" convert-from-sb-txt convert-to-sb-txt t nil nil))
 
@@ -126,9 +131,9 @@
     (modify-syntax-entry ?\w "w" table)
     (modify-syntax-entry ?, "." table)
     (modify-syntax-entry ?( "(" table)
-    (modify-syntax-entry ?[ "(" table)
-    (modify-syntax-entry ?) ")" table)
-    (modify-syntax-entry ?] ")" table)
+			 (modify-syntax-entry ?[ "(" table)
+					      (modify-syntax-entry ?) ")" table)
+			 (modify-syntax-entry ?] ")" table)
     table)
   "Syntax table for smilebasic-mode")
 
@@ -165,16 +170,16 @@
 
 ;; Indentation
 (defcustom smilebasic-indent-offset 2
-    "*Specifies the indentation offset for `smilebasic-indent-line'.
+  "*Specifies the indentation offset for `smilebasic-indent-line'.
 Statements inside a block are indented this number of columns."
-    :type 'integer
-    :group 'smilebasic)
+  :type 'integer
+  :group 'smilebasic)
 
 (defconst smilebasic-increase-indent-keywords-bol
   (concat "[ \t]*"
 	  (regexp-opt '("FOR" "REPEAT" "WHILE" "DEF" "COMMON")
 		      'symbols))
-    "Regexp string of keywords that increase indentation.
+  "Regexp string of keywords that increase indentation.
 These keywords increase indentation when found at the
 beginning of a line.")
 
@@ -182,7 +187,7 @@ beginning of a line.")
   (concat "[ \t]*"
 	  (regexp-opt '("THEN" "ELSE")
 		      'symbols))
-    "Regexp string of keywords that increase indentation.
+  "Regexp string of keywords that increase indentation.
 These keywords increase indentation when found at the
 end of a line.")
 
@@ -190,7 +195,7 @@ end of a line.")
   (concat "[ \t]*"
 	  (regexp-opt '("ENDIF" "END" "NEXT" "WEND" "UNTIL" "ELSEIF" "ELSE")
 		      'symbols))
-    "Regexp string of keywords that decrease indentation.
+  "Regexp string of keywords that decrease indentation.
 These keywords decrease indentation when found at the
 beginning of a line or after a statement separator (:).")
 
@@ -256,7 +261,7 @@ beginning of a line or after a statement separator (:).")
   (setq-local smilebasic-header-month
 	      (number-to-bytes (string-to-number (format-time-string "%m")) 1))
   (setq-local smilebasic-header-day
-	    (number-to-bytes (string-to-number (format-time-string "%d")) 1))
+	      (number-to-bytes (string-to-number (format-time-string "%d")) 1))
   (setq-local smilebasic-header-hour
 	      (number-to-bytes (string-to-number (format-time-string "%l")) 1))
   (setq-local smilebasic-header-minute
@@ -279,6 +284,6 @@ beginning of a line or after a statement separator (:).")
 
 (add-to-list 'auto-mode-alist '("\\.PRG\\'" . smilebasic-mode))
 
-(provide 'smilebasic-mode)
+(provide 'smilebasic)
 
 ;;; smilebasic.el ends here
